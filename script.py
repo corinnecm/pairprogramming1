@@ -12,7 +12,6 @@ def txt2review(path):
             except IndexError:
                 print('Couldnt find restaurant in: ' + line)
             rating = re.findall(r'\d+', line)[0]
-            print(rest, rating)
             rest = rest.lower()
             review[rest].append(float(rating))
     return review
