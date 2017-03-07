@@ -25,21 +25,15 @@ def mean(review):
     return means
 
 def output(*reviews):
-    history = []
-    lines = []
+    master = set(sum([list(r.keys()) for r in reviews], []))
+    lines = defaultdict()
     for review in reviews:
         for rest in review:
-            if rest not in history:
-                lines.append(rest + ',%f' %review[rest])
-                history.append(rest)
-            else:
-                idx = history.index(rest)
-                lines[idx] = lines[idx] + ',%f' %review[rest]
-        for item in history:
+            lines[rest] = lines.get(rest, rest) + ',%.3g' %review[rest]
+        for item in master:
             if item not in review:
-                idx = history.index(item)
-                lines[idx] = lines[idx] + ','
-    lines = [l for (y, l) in sorted(zip(history, lines))]
+                lines[item] = lines.get(item, item) + ','
+    lines = [l for (y, l) in sorted(lines.items())]
     with open(out, 'w') as f:
         for line in lines:
             f.write(line + '\n')
